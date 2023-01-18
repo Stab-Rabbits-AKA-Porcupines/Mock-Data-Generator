@@ -196,6 +196,31 @@ const getCountry = (req, res, next) => {
   })
 }
 
+const getCoordinates = (req, res, next) => {
+  try {
+    const { coordinates, quantity } = req.query;
+    if (!coordinates) return next();
+    
+    for (let i = 0; i < quantity; i++) {
+      let coordinatesString = '';
+        coordinatesString += (Math.random() * (180) + -90).toFixed(5);
+        coordinatesString += ', ';
+        coordinatesString += (Math.random() * (360) + -180).toFixed(5);
+        
+        res.locals.data[i] ? res.locals.data[i].coordinates = coordinatesString : res.locals.data.push({ coordinates: coordinatesString});
+    }
+      return next();
+    }
+  catch {((err) => {
+    const newErr = {
+        log: 'error in getCoordinates',
+        message: { err: 'problem getting coordinates at this time'}
+    }
+    return next(newErr);
+  })
+  }
+};
+
 dbController.push(makeArray);
 dbController.push(getFirstNames);
 dbController.push(getMiddleNames);
@@ -203,4 +228,5 @@ dbController.push(getLastNames);
 dbController.push(getEmails);
 dbController.push(getPhoneNumbers);
 dbController.push(getCountry);
+dbController.push(getCoordinates);
 module.exports = dbController;
