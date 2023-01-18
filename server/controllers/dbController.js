@@ -8,6 +8,8 @@ const makeArray = (req, res, next) => {
   
 const getFirstNames = (req, res, next) => {
   const { firstName, fullName, fullNameMiddle, quantity } = req.query;
+  console.log(req.query);
+  
   if (!firstName && !fullName && !fullNameMiddle) return next();
   FirstName.aggregate([
     { $sample: { size: +quantity } },
@@ -185,6 +187,9 @@ const getCountry = (req, res, next) => {
       }
     }
     res.locals.data = tempArr;
+    console.log('req-query',req.query);
+    // console.log('res',res);
+    // console.log('res.locals',res.locals);
     return next();
   })
     .catch((err) => {
@@ -196,6 +201,71 @@ const getCountry = (req, res, next) => {
   })
 }
 
+//get birthday added controller
+const getBirthday = (req, res, next) => {
+  try{
+  const {birthday, quantity} = req.query;
+  let birthdayStr = '';
+
+  //if birthday is set to false, or not set to true, go to next controller
+  if(!birthday) return next();
+    
+  //this creates a random number between 1 and 12, and toLocaleString ensures it's always 2 digits long and returned as a string (i.e. '03');
+    const createRandomMonth = () => {
+       return Math.floor(Math.random() * 12 + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
+    }
+      //this creates a random day as a string between 1 and 31, and keeps it always 2 digits long(i.e. '09' or '21')
+    const createRandomDay = () => {
+       return Math.floor(Math.random() * 31 + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+    }
+      //this creates a random year between 1900 and 2023 and returns it as a string
+    const createRandomYear = (min, max) => {
+      return Math.floor(Math.random() * (2023 - 1900) + 1900).toString();
+    }
+
+  //if there are existing objects inside of res.locals.data, just add property to their current objs
+  if(res.locals.data.length > 0){
+    //generate birthday for each object inside
+  for(let i = 0; i < quantity; i++){
+    birthdayStr += createRandomYear() + '/';
+    birthdayStr += createRandomMonth() + '/';
+    birthdayStr += createRandomDay();
+
+    res.locals.data[i].birthday = birthdayStr;
+
+    birthdayStr = '';
+
+    }
+    return next();
+  }else{
+    for(let i = 0; i < quantity; i++){
+      birthdayStr += createRandomYear() + '/';
+      birthdayStr += createRandomMonth() + '/';
+      birthdayStr += createRandomDay();
+
+      res.locals.data[i] = {birthday: birthdayStr};
+      
+      birthdayStr = '';
+    }
+    return next();
+  }
+}
+catch{((err) => {
+  const newErr = {
+      log: 'error in getBirthday',
+      message: { err: 'problem getting birthday at this time'}
+  }
+  return next(newErr);
+  })
+}
+  
+
+
+
+
+
+}
+
 dbController.push(makeArray);
 dbController.push(getFirstNames);
 dbController.push(getMiddleNames);
@@ -203,4 +273,5 @@ dbController.push(getLastNames);
 dbController.push(getEmails);
 dbController.push(getPhoneNumbers);
 dbController.push(getCountry);
+dbController.push(getBirthday);
 module.exports = dbController;
