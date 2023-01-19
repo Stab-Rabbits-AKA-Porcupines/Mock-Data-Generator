@@ -15,6 +15,7 @@ const MainContainer = () => {
   const dataInput = useRef()
   const quantInput = useRef()
   const textAreaInput = useRef()
+  const outputInput = useRef()
 
   function handleAdd(event) {
     const typeOfData = dataInput.current.value;
@@ -46,7 +47,8 @@ const MainContainer = () => {
   function handleSubmit(event) {
     const stateData = dataTypes
     const quantity = quantInput.current.value
-    let fetchString = `http://localhost:3000/api?quantity=${quantity}`
+    const output = outputInput.current.value
+    let fetchString = `http://localhost:3000/api?quantity=${quantity}&output=${output}`
 
     // build our url with all of the datatypes in the query string
     stateData.forEach((element) => {
@@ -55,7 +57,8 @@ const MainContainer = () => {
 
     axios.get(fetchString)
     .then((response) => {
-      textAreaInput.current.value = JSON.stringify(response.data)
+      if (output === 'array') textAreaInput.current.value = JSON.stringify(response.data)
+      else textAreaInput.current.value = response.data
     })
     .catch((err) => console.log('something wrong with axios request', err))
   }
@@ -82,6 +85,14 @@ const MainContainer = () => {
           <option value="URLs">URLs</option>
         </select>
         <button id='add_button' onClick={handleAdd} >Add Data Type</button>
+      </div>
+
+      <div id='csv'>
+        <label>Select output format: </label>
+        <select ref={outputInput} name="CSVSelect" id="CSVSelect">
+          <option value="CSV">CSV</option>
+          <option value="array">Array of objects</option>
+        </select>
       </div>
       
       <div id="datatype_selector">

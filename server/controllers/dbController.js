@@ -8,7 +8,6 @@ const makeArray = (req, res, next) => {
 
 const getFirstNames = (req, res, next) => {
   const { firstName, fullName, fullNameMiddle, quantity } = req.query;
-  console.log(req.query);
   
   if (!firstName && !fullName && !fullNameMiddle) return next();
   FirstName.aggregate([
@@ -269,6 +268,40 @@ const getCoordinates = (req, res, next) => {
   }
 };
 
+const toCSV = (req, res, next) => {
+  try {
+    const { output } = req.query;
+    if (output === 'array') return next();
+
+    let outputString = '';
+    
+    const dataTypes = Object.keys(res.locals.data[0]);
+    dataTypes.forEach(el => {
+      outputString += el + ', ';
+    });
+
+    res.locals.data.forEach(obj => {
+      outputString += '\r\n';
+      const values = Object.values(obj);
+      values.forEach(el => {
+        outputString += el + ', ';
+      });
+    });  
+
+    res.locals.data = outputString;
+
+    return next();
+  }
+  catch {((err) => {
+    const newErr = {
+        log: 'error in toCSV',
+        message: { err: 'problem converting to CSV format at this time'}
+    }
+    return next(newErr);
+  })
+  }
+};
+
 dbController.push(makeArray);
 dbController.push(getFirstNames);
 dbController.push(getMiddleNames);
@@ -279,4 +312,5 @@ dbController.push(getCountry);
 dbController.push(getBirthday);
 dbController.push(getCoordinates);
 dbController.push(getLink);
+dbController.push(toCSV);
 module.exports = dbController;
