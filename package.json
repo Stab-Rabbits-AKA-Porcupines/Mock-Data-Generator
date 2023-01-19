@@ -20,6 +20,12 @@
     "url": "https://github.com/Yeeti-Crabs/Mock-Data-Generator/issues"
   },
   "homepage": "https://github.com/Yeeti-Crabs/Mock-Data-Generator#readme",
+  "jest": {
+    "testEnvironment": "jest-environment-jsdom",
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-dom/extend-expect"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@babel/plugin-syntax-jsx": "^7.18.6",
