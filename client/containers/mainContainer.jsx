@@ -29,7 +29,7 @@ const MainContainer = () => {
         }
       })
       if (alreadyExists === false) {
-        return [...prevTypes, { key: uuidv4(), type: typeOfData }]
+        return [...prevTypes, { key: uuidv4(), type: typeOfData }] //goes through all controllers, all selected values are concated to url parameters
       } else {
         return [...prevTypes]
       }
@@ -77,12 +77,15 @@ const MainContainer = () => {
           <option value="email">Email</option>
           <option value="phoneNumber">Phone Number</option>
           <option value="country">Country</option>
+          <option value="birthday">Birthday</option>
+          <option value="coordinates">Coordinates</option>
+          <option value="URLs">URLs</option>
         </select>
         <button id='add_button' onClick={handleAdd} >Add Data Type</button>
       </div>
       
       <div id="datatype_selector">
-        <DataSelector dataTypes={dataTypes} handleDelete={handleDelete} />
+        <DataSelector dataTypes={dataTypes} handleDelete={handleDelete}/>
       </div>
       {/* make a button to add new DataType */}
       <div id = 'add_and_submit'>
