@@ -196,6 +196,45 @@ const getCountry = (req, res, next) => {
   })
 }
 
+const getLink = (req, res, next) => {
+  try {
+    const { link, quantity } = req.query;
+    if (!link) return next(); 
+    const tempArr = [...res.locals.data];
+    const suffix = ['.com', '.io', '.org', '.edu', '.net', '.us']
+    for (let i = 0; i < quantity; i++) {
+      let prefix = 'https://'
+      let url = '';
+      const urlLength = Math.floor(Math.random() * (10) + 30)
+        for (let i = 0; i < urlLength; i++) {
+          url += String.fromCharCode(Math.floor(Math.random() * 123 + 48));
+        }
+        url = url.replace(/[^0-9A-Za-z]/g, '');
+        // url = url.replace(/(?:[a-z0-9](?:[a-z0-9-][a-z0-9])?\.)+[a-z0-9][a-z0-9-][a-z0-9]/g);
+        prefix += url + suffix[Math.floor(Math.random() * (6))];
+
+        if (tempArr[i]) {
+          tempArr[i].link = prefix;
+        } else {
+          const newObj = {
+            link: prefix
+          }
+          tempArr.push(newObj);
+        }
+      }
+      res.locals.data = tempArr;
+      return next();
+    }
+  catch {((err) => {
+    const newErr = {
+        log: 'error in getLink',
+        message: { err: 'problem getting links at this time'}
+    }
+    return next(newErr);
+  })
+  }
+};
+
 dbController.push(makeArray);
 dbController.push(getFirstNames);
 dbController.push(getMiddleNames);
@@ -203,4 +242,7 @@ dbController.push(getLastNames);
 dbController.push(getEmails);
 dbController.push(getPhoneNumbers);
 dbController.push(getCountry);
+dbController.push(getLink);
 module.exports = dbController;
+
+
