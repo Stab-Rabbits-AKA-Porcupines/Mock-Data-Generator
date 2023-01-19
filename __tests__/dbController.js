@@ -1,16 +1,16 @@
-const dbController = require('../server/controllers/dbController.js');
+// const dbController = require('../server/controllers/dbController.js');
 
-// index:
-// 0 => makeArray
-// 1 => getFirstNames
-// 2 => getMiddleNames
-// 3 => getLastNames
-// 4 => getEmails
-// 5 => getPhoneNumbers
-// 6 => getCountry
-// 7 => getBirthday
+// // index:
+// // 0 => makeArray
+// // 1 => getFirstNames
+// // 2 => getMiddleNames
+// // 3 => getLastNames
+// // 4 => getEmails
+// // 5 => getPhoneNumbers
+// // 6 => getCountry
+// // 7 => getBirthday
 
-//functions
+// //functions
 
 describe('dbController tests', () => {
   const req = {};
