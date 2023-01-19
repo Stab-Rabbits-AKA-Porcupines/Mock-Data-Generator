@@ -269,6 +269,28 @@ const getCoordinates = (req, res, next) => {
   }
 };
 
+const toCSV = (req, res, next) => {
+  try {
+    const { CSV, quantity } = req.query;
+    if (!CSV) return next();
+    
+    for (let i = 0; i < quantity; i++) {
+        const coordinatesString = (Math.random() * (180) + -90).toFixed(5) + ', ' + (Math.random() * (360) + -180).toFixed(5);        
+        res.locals.data[i] ? res.locals.data[i].coordinates = coordinatesString : res.locals.data.push({ coordinates: coordinatesString});
+    }
+      return next();
+    }
+  catch {((err) => {
+    const newErr = {
+        log: 'error in getCoordinates',
+        message: { err: 'problem getting coordinates at this time'}
+    }
+    return next(newErr);
+  })
+  }
+
+};
+
 dbController.push(makeArray);
 dbController.push(getFirstNames);
 dbController.push(getMiddleNames);
@@ -279,4 +301,5 @@ dbController.push(getCountry);
 dbController.push(getBirthday);
 dbController.push(getCoordinates);
 dbController.push(getLink);
+dbController.push(toCSV);
 module.exports = dbController;
