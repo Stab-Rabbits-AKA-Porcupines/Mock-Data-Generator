@@ -77,6 +77,7 @@ const MainContainer = () => {
           <option value="email">Email</option>
           <option value="phoneNumber">Phone Number</option>
           <option value="country">Country</option>
+          <option value="coordinates">Coordinates</option>
         </select>
         <button id='add_button' onClick={handleAdd} >Add Data Type</button>
       </div>
