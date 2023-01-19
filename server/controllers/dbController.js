@@ -8,7 +8,6 @@ const makeArray = (req, res, next) => {
 
 const getFirstNames = (req, res, next) => {
   const { firstName, fullName, fullNameMiddle, quantity } = req.query;
-  console.log(req.query);
   
   if (!firstName && !fullName && !fullNameMiddle) return next();
   FirstName.aggregate([

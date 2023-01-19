@@ -88,7 +88,7 @@ const MainContainer = () => {
       </div>
 
       <div id='csv'>
-        <label>Add output format: </label>
+        <label>Select output format: </label>
         <select ref={outputInput} name="CSVSelect" id="CSVSelect">
           <option value="CSV">CSV</option>
           <option value="array">Array of objects</option>
