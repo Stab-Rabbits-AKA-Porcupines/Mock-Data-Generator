@@ -198,8 +198,8 @@ const getCountry = (req, res, next) => {
 
 const getLink = (req, res, next) => {
   try {
-    const { link, quantity } = req.query;
-    if (!link) return next(); 
+    const { URLs, quantity } = req.query;
+    if (!URLs) return next(); 
 
     const suffix = ['.com', '.io', '.org', '.edu', '.net', '.us']
     for (let i = 0; i < quantity; i++) {
