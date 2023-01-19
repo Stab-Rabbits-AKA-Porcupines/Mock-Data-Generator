@@ -271,8 +271,8 @@ const getCoordinates = (req, res, next) => {
 
 const toCSV = (req, res, next) => {
   try {
-    const { CSV, quantity } = req.query;
-    if (!CSV) return next();
+    const { output } = req.query;
+    if (output === 'array') return next();
 
     let outputString = '';
     
@@ -282,7 +282,7 @@ const toCSV = (req, res, next) => {
     });
 
     res.locals.data.forEach(obj => {
-      outputString += '\n';
+      outputString += '\r\n';
       const values = Object.values(obj);
       values.forEach(el => {
         outputString += el + ', ';

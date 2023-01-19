@@ -47,7 +47,8 @@ const MainContainer = () => {
   function handleSubmit(event) {
     const stateData = dataTypes
     const quantity = quantInput.current.value
-    let fetchString = `http://localhost:3000/api?quantity=${quantity}`
+    const output = outputInput.current.value
+    let fetchString = `http://localhost:3000/api?quantity=${quantity}&output=${output}`
 
     // build our url with all of the datatypes in the query string
     stateData.forEach((element) => {
@@ -56,33 +57,14 @@ const MainContainer = () => {
 
     axios.get(fetchString)
     .then((response) => {
-      textAreaInput.current.value = JSON.stringify(response.data)
+      if (output === 'array') textAreaInput.current.value = JSON.stringify(response.data)
+      else textAreaInput.current.value = response.data
     })
     .catch((err) => console.log('something wrong with axios request', err))
   }
 
   function handleCopy(event) {
     navigator.clipboard.writeText(textAreaInput.current.value)
-  }
-
-  function outputSelect(event) {
-    const typeOfData = dataInput.current.value;
-    // all of this insane logic inside of setDataTypes is just my way of preventing
-    // the user from adding the same dataType twice
-    setDataTypes(prevTypes => {
-      let alreadyExists = false;
-
-      [...prevTypes].forEach((element) => {
-        if (element.type === typeOfData) {
-          alreadyExists = true;
-        }
-      })
-      if (alreadyExists === false) {
-        return [...prevTypes, { key: uuidv4(), type: typeOfData }] //goes through all controllers, all selected values are concated to url parameters
-      } else {
-        return [...prevTypes]
-      }
-    })
   }
 
   return (
@@ -106,11 +88,11 @@ const MainContainer = () => {
       </div>
 
       <div id='csv'>
+        <label>Add output format: </label>
         <select ref={outputInput} name="CSVSelect" id="CSVSelect">
           <option value="CSV">CSV</option>
           <option value="array">Array of objects</option>
         </select>
-        <button id='add_button' onClick={outputSelect}>Add Output Format</button>
       </div>
       
       <div id="datatype_selector">
