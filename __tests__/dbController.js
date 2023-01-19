@@ -15,35 +15,26 @@ const dbController = require('../server/controllers/dbController.js');
 //functions
 
 describe('dbController tests', () => {
-  const req = {
-    query: {
-      quantity: 3,
-      link: true
-    }
-  };
-  const res = {
-    locals: {
-      data: []
-    }
-  };
+  const req = {}
+  const res = {}
 
-  // beforeAll(() => {
-  //   //mockreq
-  //   req.query = {
-  //       quantity: 3,
-  //       birthday: true
-  //     }
+  beforeAll(() => {
+    //mockreq
+    req.query = {
+        quantity: 3,
+        link: true
+      }
 
-  //   //mockres
-  //   res.locals = {
-  //       data: []
-  //     }
-  // });
+    //mockres
+    res.locals = {
+        data: []
+      }
+  });
 
   //if data empty, need to make obj + add properties
   //if data has at least 1 obj in it, just add properties
 
-  xit('has a function getBirthday', () => {
+  it('has a function getBirthday', () => {
      
     // const getBirthday = dbController[0];
     // console.log(dbController[0].prototype);
@@ -55,51 +46,59 @@ describe('dbController tests', () => {
   describe('getLink controller tests', () => {
     const getLink = dbController[7];
 
-  
-
-    xit('has a function getLink', () => {
+    it('has a function getLink', () => {
       // test for function type
       expect(typeof getLink).toBe('function');
     });
       // test for return string
-    xit('getLink returns a string', () => {
+    it('getLink returns a string', () => {
       getLink(req, res);
-      const result = res.locals.data[0].link;
-      expect(typeof result).toBe('string')
+      for (let i = 0; i <req.query.quantity; i++) {
+        const result = res.locals.data[i].link;
+        expect(typeof result).toBe('string')
+      }
+      
     });
       // test for first 7 indexes to = 'https://'
-    xit('getLink returned string has a valid https:// prefix', () => {
+    it('getLink returned string has a valid https:// prefix', () => {
       getLink(req, res);
-      const prefix = res.locals.data[0].link.slice(0, 8)
-      expect(prefix).toBe('https://')
+      for (let i = 0; i <req.query.quantity; i++) {
+        const prefix = res.locals.data[i].link.slice(0, 8)
+        expect(prefix).toBe('https://');
+      }
     });
-      // test for 8th index to be a letter
+      // test for 8th index to be a valid character
     it('getLink has a letter for the 8th index of its returned string', () => {
       getLink(req, res);
-      const eighthIndex = res.locals.data[0].link.slice(8, 9);
-      function validChar(str) {
+      for (let i = 0; i <req.query.quantity; i++) {
+        const eighthIndex = res.locals.data[i].link.slice(8, 9);
+        function validChar(str) {
         return /^[A-Za-z0-9]*$/.test(str);
       }
-      expect(validChar(eighthIndex)).toBeTruthy()
+      expect(validChar(eighthIndex)).toBe(true)
+    }
     });
       // test for final 3 or 4 indexes to = one of suffix array elements
-    xit('getLink has a valid suffix', () => {
+    it('getLink has a valid suffix', () => {
       const suffix = ['.com', '.io', '.org', '.edu', '.net', '.us']
       getLink(req, res);
-      const string4 = res.locals.data[0].link.slice(-4);
-      const string3 = res.locals.data[0].link.slice(-3);
-      let result = false; 
-      if(suffix.includes(string3) || suffix.includes(string4)) result = true;
-      expect(result).toBeTruthy()
+        for (let i = 0; i <req.query.quantity; i++) {
+          const string4 = res.locals.data[i].link.slice(-4);
+          const string3 = res.locals.data[i].link.slice(-3);
+          let result = false; 
+          if(suffix.includes(string3) || suffix.includes(string4)) result = true;
+          expect(result).toBe(true)
+      };
     });
       // test for res.locals.data to be updated
-    xit('getLink populates res.locals.data', () => {
+    it('getLink populates res.locals.data', () => {
       getLink(req, res);
-      const result = res.locals.data[0].link;
-      expect(result).toBeTruthy()
+      for (let i = 0; i <req.query.quantity; i++) {
+        const result = res.locals.data[i].link;
+        expect(result).toBeTruthy()
+      }
   });
    
 });
-
 
 });

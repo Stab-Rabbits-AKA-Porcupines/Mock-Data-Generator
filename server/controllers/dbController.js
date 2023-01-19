@@ -200,7 +200,7 @@ const getLink = (req, res, next) => {
   try {
     const { link, quantity } = req.query;
     if (!link) return next(); 
-    const tempArr = [...res.locals.data];
+
     const suffix = ['.com', '.io', '.org', '.edu', '.net', '.us']
     for (let i = 0; i < quantity; i++) {
       let prefix = 'https://'
@@ -210,19 +210,12 @@ const getLink = (req, res, next) => {
           url += String.fromCharCode(Math.floor(Math.random() * 123 + 48));
         }
         url = url.replace(/[^0-9A-Za-z]/g, '');
-        // url = url.replace(/(?:[a-z0-9](?:[a-z0-9-][a-z0-9])?\.)+[a-z0-9][a-z0-9-][a-z0-9]/g);
         prefix += url + suffix[Math.floor(Math.random() * (6))];
 
-        if (tempArr[i]) {
-          tempArr[i].link = prefix;
-        } else {
-          const newObj = {
-            link: prefix
-          }
-          tempArr.push(newObj);
-        }
+        res.locals.data[i] ? res.locals.data[i].link = prefix : res.locals.data.push({link: prefix});
+  
       }
-      res.locals.data = tempArr;
+      
       return next();
     }
   catch {((err) => {
