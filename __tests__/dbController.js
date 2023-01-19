@@ -21,7 +21,7 @@ describe('dbController tests', () => {
   beforeAll(() => {
     req.query = {
         quantity: 3,
-        link: true,
+        URLs: true,
         birthday: true,
         coordinates: true
       }
@@ -35,14 +35,15 @@ describe('dbController tests', () => {
   describe('getBirthday controller tests', () => {
     const getBirthday = dbController[7];
 
+    beforeEach(() => {
+      getBirthday(req,res);
+    });
+
     it('has a function getBirthday', () => {
       expect(typeof getBirthday).toBe('function');
-      
     });
   
-    it('res.locals has birthday property in each obj', () => {
-      getBirthday(req,res);
-      
+    it('res.locals has birthday property in each obj', () => {      
       for(let i = 0; i < req.query.quantity; i++){
         expect(res.locals.data[i]).toHaveProperty('birthday');
         expect(res.locals.data[i].birthday).toBeDefined();
@@ -51,15 +52,12 @@ describe('dbController tests', () => {
     });
 
     it('all birthdays in res.locals should be a string', () => {
-      getBirthday(req,res);
       for(let i = 0; i < req.query.quantity; i++){
         expect(typeof res.locals.data[i].birthday).toBe('string');
       }
     })
   
-    it('birthday should have a year, month and day split up by /', () => {
-      getBirthday(req,res);
-    
+    it('birthday should have a year, month and day split up by /', () => {    
       for(let i = 0; i < req.query.quantity; i++){
         expect(res.locals.data[i].birthday[4]).toEqual('/');
         expect(res.locals.data[i].birthday[7]).toEqual('/'); 
@@ -74,8 +72,6 @@ describe('dbController tests', () => {
         expect(Number(splitBirthday[2])).toBeLessThanOrEqual(31);
         expect(Number(splitBirthday[2])).toBeGreaterThanOrEqual(1);
       }
-      
-  
     })
   
     it('month in birthday should be a number between 01 and 12 and should always be 2 characters long', () => {
@@ -86,7 +82,6 @@ describe('dbController tests', () => {
         expect(Number(splitBirthday[1])).toBeLessThanOrEqual(12);
         expect(Number(splitBirthday[1])).toBeGreaterThanOrEqual(1);
       }
-  
     })
   
     it('year in birthday should be a number between 1900 and 2023 and should always be 4 characters long', () => {
