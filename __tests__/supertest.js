@@ -50,7 +50,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of last names when requested for last name data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, lastName: true })
+          .query({ quantity: 10, fullName: true })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -110,7 +110,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of urls when requested for urls data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, link: true })
+          .query({ quantity: 10, URLs: true })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
