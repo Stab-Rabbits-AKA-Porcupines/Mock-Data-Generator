@@ -15,6 +15,7 @@ const MainContainer = () => {
   const dataInput = useRef()
   const quantInput = useRef()
   const textAreaInput = useRef()
+  const outputInput = useRef()
 
   function handleAdd(event) {
     const typeOfData = dataInput.current.value;
@@ -64,6 +65,26 @@ const MainContainer = () => {
     navigator.clipboard.writeText(textAreaInput.current.value)
   }
 
+  function outputSelect(event) {
+    const typeOfData = dataInput.current.value;
+    // all of this insane logic inside of setDataTypes is just my way of preventing
+    // the user from adding the same dataType twice
+    setDataTypes(prevTypes => {
+      let alreadyExists = false;
+
+      [...prevTypes].forEach((element) => {
+        if (element.type === typeOfData) {
+          alreadyExists = true;
+        }
+      })
+      if (alreadyExists === false) {
+        return [...prevTypes, { key: uuidv4(), type: typeOfData }] //goes through all controllers, all selected values are concated to url parameters
+      } else {
+        return [...prevTypes]
+      }
+    })
+  }
+
   return (
     <div id="main_container">
       <div id='form'>
@@ -82,6 +103,14 @@ const MainContainer = () => {
           <option value="URLs">URLs</option>
         </select>
         <button id='add_button' onClick={handleAdd} >Add Data Type</button>
+      </div>
+
+      <div id='csv'>
+        <select ref={outputInput} name="CSVSelect" id="CSVSelect">
+          <option value="CSV">CSV</option>
+          <option value="array">Array of objects</option>
+        </select>
+        <button id='add_button' onClick={outputSelect}>Add Output Format</button>
       </div>
       
       <div id="datatype_selector">
