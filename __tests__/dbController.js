@@ -47,6 +47,15 @@ describe('dbController tests', () => {
     expect(typeof dbController[getCoordinatesIndex]).toBe('function');
   });
 
+  it('getCoordinates inserts a new property "coordinates" into res.locals.data and does so the right amount of times', () => {
+    dbController[getCoordinatesIndex](req, res);
+    let count = 0;
+    res.locals.data.forEach(obj => {
+      if (Object.hasOwn(obj, 'coordinates')) count++;
+    });
+    expect(count).toEqual(req.query.quantity);
+  });
+
   it('getCoordinates returns a string with a comma', () => {
     dbController[getCoordinatesIndex](req, res);
     const result = res.locals.data[0].coordinates.includes(',');
