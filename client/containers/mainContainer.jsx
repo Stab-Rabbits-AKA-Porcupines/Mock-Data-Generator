@@ -11,10 +11,10 @@ import copyIcon from '../copyIcon.svg'
 
 const MainContainer = () => {
 
-  const [dataTypes, setDataTypes] = useState([]);
-  const dataInput = useRef();
-  const quantInput = useRef();
-  const textAreaInput = useRef();
+  const [dataTypes, setDataTypes] = useState([])
+  const dataInput = useRef()
+  const quantInput = useRef()
+  const textAreaInput = useRef()
 
   function handleAdd(event) {
     const typeOfData = dataInput.current.value;
@@ -29,40 +29,40 @@ const MainContainer = () => {
         }
       })
       if (alreadyExists === false) {
-        return [...prevTypes, { key: uuidv4(), type: typeOfData }];
+        return [...prevTypes, { key: uuidv4(), type: typeOfData }]
       } else {
-        return [...prevTypes];
+        return [...prevTypes]
       }
 
-    });
-  };
+    })
+  }
 
   function handleDelete(theKey) {
     setDataTypes(prevTypes => {
       return [...prevTypes].filter((element) => element.key !== theKey)
-    });
-  };
+    })
+  }
 
   function handleSubmit(event) {
-    const stateData = dataTypes;
-    const quantity = quantInput.current.value;
-    let fetchString = `http://localhost:3000/api?quantity=${quantity}`;
+    const stateData = dataTypes
+    const quantity = quantInput.current.value
+    let fetchString = `http://localhost:3000/api?quantity=${quantity}`
 
     // build our url with all of the datatypes in the query string
     stateData.forEach((element) => {
       fetchString += `&${element.type}=true`
-    });
+    })
 
     axios.get(fetchString)
     .then((response) => {
       textAreaInput.current.value = JSON.stringify(response.data)
     })
     .catch((err) => console.log('something wrong with axios request', err))
-  };
+  }
 
   function handleCopy(event) {
     navigator.clipboard.writeText(textAreaInput.current.value)
-  };
+  }
 
   return (
     <div id="main_container">
@@ -77,6 +77,10 @@ const MainContainer = () => {
           <option value="email">Email</option>
           <option value="phoneNumber">Phone Number</option>
           <option value="country">Country</option>
+          <option value="birthday">Birthday</option>
+          <option value="coordinates">Coordinates</option>
+          <option value="URLs">URLs</option>
+          
         </select>
         <button id='add_button' onClick={handleAdd} >Add Data Type</button>
       </div>
