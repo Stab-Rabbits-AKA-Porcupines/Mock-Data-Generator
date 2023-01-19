@@ -155,11 +155,7 @@ const getCoordinates = (req, res, next) => {
     if (!coordinates) return next();
     
     for (let i = 0; i < quantity; i++) {
-      let coordinatesString = '';
-        coordinatesString += (Math.random() * (180) + -90).toFixed(5);
-        coordinatesString += ', ';
-        coordinatesString += (Math.random() * (360) + -180).toFixed(5);
-        
+        const coordinatesString = (Math.random() * (180) + -90).toFixed(5) + ', ' + (Math.random() * (360) + -180).toFixed(5);        
         res.locals.data[i] ? res.locals.data[i].coordinates = coordinatesString : res.locals.data.push({ coordinates: coordinatesString});
     }
       return next();

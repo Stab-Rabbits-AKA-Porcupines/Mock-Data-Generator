@@ -41,41 +41,44 @@ describe('dbController tests', () => {
     expect(typeof dbController[0]).toBe('function');
   });
 
-  const getCoordinatesIndex = 7;
+  describe('getCoordinates tests', () => {
 
-  it('has a function getCoordinates', () => {
-    expect(typeof dbController[getCoordinatesIndex]).toBe('function');
-  });
+    const getCoordinates = dbController[7];
 
-  it('getCoordinates inserts a new property "coordinates" into res.locals.data and does so the right amount of times', () => {
-    dbController[getCoordinatesIndex](req, res);
-    let count = 0;
-    res.locals.data.forEach(obj => {
-      if (Object.hasOwn(obj, 'coordinates')) count++;
+    it('has a function getCoordinates', () => {
+      expect(typeof getCoordinates).toBe('function');
     });
-    expect(count).toEqual(req.query.quantity);
-  });
 
-  it('getCoordinates returns a string with a comma', () => {
-    dbController[getCoordinatesIndex](req, res);
-    const result = res.locals.data[0].coordinates.includes(',');
-    const string = res.locals.data[0].coordinates;
-    expect(result).toBe(true);
-    expect(typeof string).toBe('string');
-  });
+    it('getCoordinates inserts a new property "coordinates" into res.locals.data and does so the right amount of times', () => {
+      getCoordinates(req, res);
+      let count = 0;
+      res.locals.data.forEach(obj => {
+        if (Object.hasOwn(obj, 'coordinates')) count++;
+      });
+      expect(count).toEqual(req.query.quantity);
+    });
 
-  it('getCoordinates has valid value for latitude', () => {
-    dbController[getCoordinatesIndex](req, res);
-    const resultLat = Number(res.locals.data[0].coordinates.split(',')[0]);
-    console.log(resultLat);
-    expect(resultLat).toBeGreaterThanOrEqual(-90);
-    expect(resultLat).toBeLessThanOrEqual(90);
-  });
+    it('getCoordinates returns a string with a comma', () => {
+      getCoordinates(req, res);
+      const result = res.locals.data[0].coordinates.includes(',');
+      const string = res.locals.data[0].coordinates;
+      expect(result).toBe(true);
+      expect(typeof string).toBe('string');
+    });
 
-  it('getCoordinates has valid value for longitude', () => {
-    dbController[getCoordinatesIndex](req, res);
-    const resultLong = Number(res.locals.data[0].coordinates.split(',')[1]);
-    expect(resultLong).toBeGreaterThanOrEqual(-180);
-    expect(resultLong).toBeLessThanOrEqual(180);
+    it('getCoordinates has valid value for latitude', () => {
+      getCoordinates(req, res);
+      const resultLat = Number(res.locals.data[0].coordinates.split(',')[0]);
+      console.log(resultLat);
+      expect(resultLat).toBeGreaterThanOrEqual(-90);
+      expect(resultLat).toBeLessThanOrEqual(90);
+    });
+
+    it('getCoordinates has valid value for longitude', () => {
+      getCoordinates(req, res);
+      const resultLong = Number(res.locals.data[0].coordinates.split(',')[1]);
+      expect(resultLong).toBeGreaterThanOrEqual(-180);
+      expect(resultLong).toBeLessThanOrEqual(180);
+    });
   });
 });
