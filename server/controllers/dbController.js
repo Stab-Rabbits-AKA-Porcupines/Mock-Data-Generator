@@ -11,16 +11,14 @@ const getFirstNames = (req, res, next) => {
   console.log(req.query);
   
   if (!firstName && !fullName && !fullNameMiddle) return next();
-  FirstName.aggregate([{ $sample: { size: +quantity } }, { $project: { firstName: 1, _id: 0 } }])
-    .then(data => {
-      const tempArr = [...res.locals.data];
+  FirstName.aggregate([
+    { $sample: { size: +quantity } },
+    { $project: { 'firstName': 1, _id: 0 } },
+  ])
+    .then((data) => {
       for (let i = 0; i < data.length; i++) {
-        newObj = {
-          firstName: data[i].firstName
-        };
-        tempArr.push(newObj);
+        res.locals.data.push({ firstName: data[i].firstName });
       }
-      res.locals.data = tempArr;
       return next();
     })
     .catch(err => {
@@ -35,11 +33,19 @@ const getFirstNames = (req, res, next) => {
 const getMiddleNames = (req, res, next) => {
   const { fullNameMiddle, quantity } = req.query;
   if (!fullNameMiddle) return next();
-  FirstName.aggregate([{ $sample: { size: +quantity } }, { $project: { firstName: 1, _id: 0 } }])
-    .then(data => {
-      const tempArr = [...res.locals.data];
-      for (let i = 0; i < data.length; i++) {
-        tempArr[i].middleName = data[i].firstName;
+  FirstName.aggregate([
+    { $sample: { size: +quantity } },
+    { $project: { 'firstName': 1, _id: 0 } },
+  ]).then((data) =>{
+    for (let i =0; i < data.length; i++) {
+      res.locals.data[i].middleName = data[i].firstName;
+    }
+    return next();
+  })
+    .catch((err) => {
+      const newErr = {
+          log: 'error in getMiddleNames',
+          message: { err: 'problem getting Middle Names at this time'}
       }
       res.locals.data = tempArr;
       return next();
@@ -56,26 +62,18 @@ const getMiddleNames = (req, res, next) => {
 const getLastNames = (req, res, next) => {
   const { lastName, fullName, fullNameMiddle, quantity } = req.query;
   if (!lastName && !fullName && !fullNameMiddle) return next();
-  LastName.aggregate([{ $sample: { size: +quantity } }, { $project: { lastName: 1, _id: 0 } }])
-    .then(data => {
-      const tempArr = [...res.locals.data];
-      if (tempArr[0]) {
-        for (let i = 0; i < quantity; i++) {
-          tempArr[i].lastName = data[i].lastName;
-        }
-      } else {
-        for (let i = 0; i < quantity; i++) {
-          newObj = {
-            lastName: data[i].lastName
-          };
-          tempArr.push(newObj);
-        }
-      }
-      res.locals.data = tempArr;
-      return next();
-    })
-    .catch(err => {
-      const newErr = {
+  LastName.aggregate([
+    { $sample: { size: +quantity } },
+    { $project: { 'lastName': 1, _id: 0 } },
+  ])
+  .then((data)=> {
+      for (let i = 0; i < data.length; i ++) {
+        res.locals.data[i].lastName = data[i].lastName;
+      } 
+    return next();
+  })
+  .catch((err) => {
+    const newErr = {
         log: 'error in getLastNames',
         message: { err: 'problem getting lastNames at this time' }
       };
@@ -87,7 +85,6 @@ const getEmails = (req, res, next) => {
   try {
     const { email, quantity } = req.query;
     if (!email) return next();
-    const tempArr = [...res.locals.data];
     for (let i = 0; i < quantity; i++) {
       let emailString = '';
       const emailLength = Math.floor(Math.random() * 31 + 5);
@@ -98,17 +95,9 @@ const getEmails = (req, res, next) => {
 
       emailString = emailString.replace(/[^0-9A-Za-z]/g, '');
       emailString += '@yeticrabs.com';
-
-      if (tempArr[i]) {
-        tempArr[i].email = emailString;
-      } else {
-        const newObj = {
-          email: emailString
-        };
-        tempArr.push(newObj);
-      }
+      
+      res.locals.data[i] ? res.locals.data[i].email = emailString : res.locals.data.push({ email: emailString });
     }
-    res.locals.data = tempArr;
     return next();
   } catch {
     err => {
@@ -125,7 +114,6 @@ const getPhoneNumbers = (req, res, next) => {
   try {
     const { phoneNumber, quantity } = req.query;
     if (!phoneNumber) return next();
-    const tempArr = [...res.locals.data];
 
     for (let i = 0; i < quantity; i++) {
       let phoneNumString = '';
@@ -135,16 +123,8 @@ const getPhoneNumbers = (req, res, next) => {
         if (i === 2) phoneNumString += ') ';
         if (i === 5) phoneNumString += '-';
       }
-      if (tempArr[i]) {
-        tempArr[i].phoneNumber = phoneNumString;
-      } else {
-        const newObj = {
-          phoneNumber: phoneNumString
-        };
-        tempArr.push(newObj);
-      }
+      res.locals.data[i] ? res.locals.data[i].phoneNumber = phoneNumString : res.locals.data.push({ phoneNumber: phoneNumString });
     }
-    res.locals.data = tempArr;
     return next();
   } catch {
     err => {
@@ -160,25 +140,17 @@ const getPhoneNumbers = (req, res, next) => {
 const getCountry = (req, res, next) => {
   const { country, quantity } = req.query;
   if (!country) return next();
-  Country.aggregate([{ $sample: { size: +quantity } }, { $project: { country: 1, _id: 0 } }])
-    .then(data => {
-      const tempArr = [...res.locals.data];
-      if (tempArr[0]) {
-        for (let i = 0; i < data.length; i++) {
-          tempArr[i].country = data[i].country;
-        }
-      } else {
-        for (let i = 0; i < data.length; i++) {
-          const newObj = {
-            country: data[i].country
-          };
-          tempArr.push(newObj);
-        }
+  Country.aggregate([
+    { $sample: { size: +quantity } },
+    { $project: { 'country': 1, _id: 0 } },
+  ])
+  .then((data)=> {
+      for (let i = 0; i < data.length; i++) {
+        res.locals.data[i] ? res.locals.data[i].country = data[i].country : res.locals.data.push({ country: data[i].country });
       }
-      res.locals.data = tempArr;
-      return next();
-    })
-    .catch(err => {
+    return next();
+  })
+    .catch((err) => {
       const newErr = {
         log: 'error in getMiddleNames',
         message: { err: 'problem getting Middle Names at this time' }
@@ -276,6 +248,27 @@ const getLink = (req, res, next) => {
   }
 };
 
+const getCoordinates = (req, res, next) => {
+  try {
+    const { coordinates, quantity } = req.query;
+    if (!coordinates) return next();
+    
+    for (let i = 0; i < quantity; i++) {
+        const coordinatesString = (Math.random() * (180) + -90).toFixed(5) + ', ' + (Math.random() * (360) + -180).toFixed(5);        
+        res.locals.data[i] ? res.locals.data[i].coordinates = coordinatesString : res.locals.data.push({ coordinates: coordinatesString});
+    }
+      return next();
+    }
+  catch {((err) => {
+    const newErr = {
+        log: 'error in getCoordinates',
+        message: { err: 'problem getting coordinates at this time'}
+    }
+    return next(newErr);
+  })
+  }
+};
+
 dbController.push(makeArray);
 dbController.push(getFirstNames);
 dbController.push(getMiddleNames);
@@ -284,5 +277,6 @@ dbController.push(getEmails);
 dbController.push(getPhoneNumbers);
 dbController.push(getCountry);
 dbController.push(getBirthday);
+dbController.push(getCoordinates);
 dbController.push(getLink);
 module.exports = dbController;

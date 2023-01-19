@@ -22,7 +22,9 @@ describe('dbController tests', () => {
     //mockreq
     req.query = {
         quantity: 3,
-        link: true
+        link: true,
+        birthday: true,
+        coordinates: true
       }
 
     //mockres
@@ -104,7 +106,7 @@ describe('dbController tests', () => {
   });
 
   describe('getLink controller tests', () => {
-    const getLink = dbController[8];
+    const getLink = dbController[9];
 
     it('has a function getLink', () => {
       // test for function type
@@ -157,6 +159,47 @@ describe('dbController tests', () => {
         const result = res.locals.data[i].link;
         expect(result).toBeTruthy()
       }
+  });
+
+  describe('getCoordinates tests', () => {
+
+    const getCoordinates = dbController[8];
+
+    it('has a function getCoordinates', () => {
+      expect(typeof getCoordinates).toBe('function');
+    });
+
+    it('getCoordinates inserts a new property "coordinates" into res.locals.data and does so the right amount of times', () => {
+      getCoordinates(req, res);
+      let count = 0;
+      res.locals.data.forEach(obj => {
+        if (Object.hasOwn(obj, 'coordinates')) count++;
+      });
+      expect(count).toEqual(req.query.quantity);
+    });
+
+    it('getCoordinates returns a string with a comma', () => {
+      getCoordinates(req, res);
+      const result = res.locals.data[0].coordinates.includes(',');
+      const string = res.locals.data[0].coordinates;
+      expect(result).toBe(true);
+      expect(typeof string).toBe('string');
+    });
+
+    it('getCoordinates has valid value for latitude', () => {
+      getCoordinates(req, res);
+      const resultLat = Number(res.locals.data[0].coordinates.split(',')[0]);
+      console.log(resultLat);
+      expect(resultLat).toBeGreaterThanOrEqual(-90);
+      expect(resultLat).toBeLessThanOrEqual(90);
+    });
+
+    it('getCoordinates has valid value for longitude', () => {
+      getCoordinates(req, res);
+      const resultLong = Number(res.locals.data[0].coordinates.split(',')[1]);
+      expect(resultLong).toBeGreaterThanOrEqual(-180);
+      expect(resultLong).toBeLessThanOrEqual(180);
+    });
   });
 });
 
