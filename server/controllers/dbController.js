@@ -244,13 +244,37 @@ catch{((err) => {
   return next(newErr);
   })
 }
-  
+};
 
+const getLink = (req, res, next) => {
+  try {
+    const { URLs, quantity } = req.query;
+    if (!URLs) return next(); 
 
+    const suffix = ['.com', '.io', '.org', '.edu', '.net', '.us']
+    for (let i = 0; i < quantity; i++) {
+      let prefix = 'https://'
+      let url = '';
+      const urlLength = Math.floor(Math.random() * (10) + 30)
+        for (let i = 0; i < urlLength; i++) {
+          url += String.fromCharCode(Math.floor(Math.random() * 123 + 48));
+        }
+        url = url.replace(/[^0-9A-Za-z]/g, '');
+        prefix += url + suffix[Math.floor(Math.random() * (6))];
 
-
-
-}
+        res.locals.data[i] ? res.locals.data[i].link = prefix : res.locals.data.push({link: prefix});
+      }
+      return next();
+    }
+  catch {((err) => {
+    const newErr = {
+        log: 'error in getLink',
+        message: { err: 'problem getting links at this time'}
+    }
+    return next(newErr);
+  })
+  }
+};
 
 dbController.push(makeArray);
 dbController.push(getFirstNames);
@@ -260,4 +284,5 @@ dbController.push(getEmails);
 dbController.push(getPhoneNumbers);
 dbController.push(getCountry);
 dbController.push(getBirthday);
+dbController.push(getLink);
 module.exports = dbController;
