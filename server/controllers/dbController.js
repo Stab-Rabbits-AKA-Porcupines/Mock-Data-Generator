@@ -273,22 +273,34 @@ const toCSV = (req, res, next) => {
   try {
     const { CSV, quantity } = req.query;
     if (!CSV) return next();
+
+    let outputString = '';
     
-    for (let i = 0; i < quantity; i++) {
-        const coordinatesString = (Math.random() * (180) + -90).toFixed(5) + ', ' + (Math.random() * (360) + -180).toFixed(5);        
-        res.locals.data[i] ? res.locals.data[i].coordinates = coordinatesString : res.locals.data.push({ coordinates: coordinatesString});
-    }
-      return next();
-    }
+    const dataTypes = Object.keys(res.locals.data[0]);
+    dataTypes.forEach(el => {
+      outputString += el + ', ';
+    });
+
+    res.locals.data.forEach(obj => {
+      outputString += '\n';
+      const values = Object.values(obj);
+      values.forEach(el => {
+        outputString += el + ', ';
+      });
+    });  
+
+    res.locals.data = outputString;
+
+    return next();
+  }
   catch {((err) => {
     const newErr = {
-        log: 'error in getCoordinates',
-        message: { err: 'problem getting coordinates at this time'}
+        log: 'error in toCSV',
+        message: { err: 'problem converting to CSV format at this time'}
     }
     return next(newErr);
   })
   }
-
 };
 
 dbController.push(makeArray);

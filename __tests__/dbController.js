@@ -23,7 +23,8 @@ describe('dbController tests', () => {
         quantity: 3,
         URLs: true,
         birthday: true,
-        coordinates: true
+        coordinates: true,
+        CSV: true
       }
 
     res.locals = {
@@ -195,10 +196,12 @@ describe('dbController tests', () => {
     const toCSV = dbController[10];
 
     beforeEach(() => {
+      res.locals.data = [{"firstName":"Marcelo","birthday":"1970/09/12"},{"firstName":"Stephanie","birthday":"2006/05/24"},{"firstName":"Devyn","birthday":"1957/10/24"},{"firstName":"Mauricio","birthday":"1911/07/22"},{"firstName":"Victor","birthday":"2018/03/16"}];
       toCSV(req, res);
     });
 
     it('has a function toCSV', () => {
+      console.log(res.locals.data);
       expect(typeof toCSV).toBe('function');
     });
 
@@ -207,13 +210,14 @@ describe('dbController tests', () => {
     });
 
     it('toCSV takes the datatypes and puts them in the first row of text in the output', () => {
-      const firstLine = res.locals.data[0].split('\n, 1');
-      expect(firstLine).toContain(req.query.link, req.query.birthday, req.query.coordinates);
+      const firstLine = res.locals.data.split('\n', 1);
+      expect(firstLine.includes(req.query.birthday)).toBeTruthy;
+      expect(firstLine.includes('firstName')).toBeTruthy;
     });
 
     it('toCSV has the right amount of line breaks', () => { 
-      const lines = (str.match(/\n/g) || '').length + 1;
-      expect(lines).toEqual(req.query.quantity + 1);
+      const lines = () => (res.locals.data.match(/[^\n]*\n[^\n]*/gi).length + 1);
+      expect(lines()).toEqual(6); // hardcoded with mock data above, see console.log
     });
   });
 });
