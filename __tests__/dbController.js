@@ -40,4 +40,12 @@ describe('dbController tests', () => {
     // expect(dbController.includes(makeArray)).toBe(true);
     expect(typeof dbController[0]).toBe('function');
   });
+
+  it('has a function getUrl', () => {
+    const getBirthday = dbController[7];
+    console.log(dbController[0].prototype);
+    expect(dbController.find()).toBe(makeArray);
+    // expect(dbController.includes(makeArray)).toBe(true);
+    expect(typeof dbController[0]).toBe('function');
+  });
 });
