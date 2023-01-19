@@ -14,14 +14,9 @@ const getFirstNames = (req, res, next) => {
     { $project: { 'firstName': 1, _id: 0 } },
   ])
     .then((data) => {
-      const tempArr = [...res.locals.data];
       for (let i = 0; i < data.length; i++) {
-        newObj = {
-          firstName: data[i].firstName
-        };
-        tempArr.push(newObj);
+        res.locals.data.push({ firstName: data[i].firstName });
       }
-      res.locals.data = tempArr;
       return next();
     })
     .catch((err) => {
@@ -40,11 +35,9 @@ const getMiddleNames = (req, res, next) => {
     { $sample: { size: +quantity } },
     { $project: { 'firstName': 1, _id: 0 } },
   ]).then((data) =>{
-    const tempArr = [...res.locals.data];
     for (let i =0; i < data.length; i++) {
-      tempArr[i].middleName = data[i].firstName;
+      res.locals.data[i].middleName = data[i].firstName;
     }
-    res.locals.data = tempArr;
     return next();
   })
     .catch((err) => {
@@ -64,20 +57,9 @@ const getLastNames = (req, res, next) => {
     { $project: { 'lastName': 1, _id: 0 } },
   ])
   .then((data)=> {
-    const tempArr = [...res.locals.data];
-    if (tempArr[0]) {
-      for (let i = 0; i < quantity; i ++) {
-        tempArr[i].lastName = data[i].lastName;
-      }
-    }else{
-      for (let i = 0; i < quantity; i++) {
-        newObj = {
-          lastName: data[i].lastName,
-        }
-        tempArr.push(newObj);
-      }
-    }
-    res.locals.data = tempArr;
+      for (let i = 0; i < data.length; i ++) {
+        res.locals.data[i].lastName = data[i].lastName;
+      } 
     return next();
   })
   .catch((err) => {
@@ -93,7 +75,6 @@ const getEmails = (req, res, next) => {
   try{
     const { email, quantity } = req.query;
     if (!email) return next();
-    const tempArr = [...res.locals.data];
     for (let i = 0; i < quantity; i++) {
       let emailString = '';
       const emailLength = Math.floor(Math.random() * 31 + 5);
@@ -105,16 +86,8 @@ const getEmails = (req, res, next) => {
       emailString = emailString.replace(/[^0-9A-Za-z]/g, '');
       emailString += '@yeticrabs.com';
       
-      if (tempArr[i]) {
-        tempArr[i].email = emailString;
-      } else {
-        const newObj = {
-          email: emailString
-        }
-        tempArr.push(newObj);
-      }
+      res.locals.data[i] ? res.locals.data[i].email = emailString : res.locals.data.push({ email: emailString });
     }
-    res.locals.data = tempArr;
     return next();
   }
   catch {((err) => {
@@ -131,8 +104,7 @@ const getPhoneNumbers = (req, res, next) => {
   try {
     const { phoneNumber, quantity } = req.query;
     if (!phoneNumber) return next();
-    const tempArr = [...res.locals.data];
-    
+
     for (let i = 0; i < quantity; i++) {
       let phoneNumString = '';
       for (let i = 0; i < 10; i++) {
@@ -141,16 +113,8 @@ const getPhoneNumbers = (req, res, next) => {
         if (i===2) phoneNumString += ') ';
         if (i===5) phoneNumString += '-';
       }
-      if (tempArr[i]) {
-        tempArr[i].phoneNumber = phoneNumString
-      } else {
-        const newObj = {
-          phoneNumber: phoneNumString
-        }
-        tempArr.push(newObj);
-      }
+      res.locals.data[i] ? res.locals.data[i].phoneNumber = phoneNumString : res.locals.data.push({ phoneNumber: phoneNumString });
     }
-    res.locals.data = tempArr;
     return next();
   }
   catch {((err) => {
@@ -171,20 +135,9 @@ const getCountry = (req, res, next) => {
     { $project: { 'country': 1, _id: 0 } },
   ])
   .then((data)=> {
-    const tempArr = [...res.locals.data];
-    if (tempArr[0]) {
       for (let i = 0; i < data.length; i++) {
-        tempArr[i].country = data[i].country;
+        res.locals.data[i] ? res.locals.data[i].country = data[i].country : res.locals.data.push({ country: data[i].country });
       }
-    }else{
-      for (let i = 0; i < data.length; i++) {
-        const newObj = {
-          country: data[i].country
-        }
-        tempArr.push(newObj);
-      }
-    }
-    res.locals.data = tempArr;
     return next();
   })
     .catch((err) => {
