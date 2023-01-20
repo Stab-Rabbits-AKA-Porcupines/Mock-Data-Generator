@@ -1,12 +1,12 @@
 # Mock Data Generator
 
-#### Uses in-house API to generate names, emails, phone numbers, countries, birthday, coordinates, and URLs into textbox with copy button.
+#### Uses in-house API to generate names, emails, phone numbers, countries, birthdays, coordinates, and URLs into textbox with copy button.
 
 ## Version 2.0 
-- Used TDD to implement new datatypes and output options
+- Used TDD to implement new datatypes and output options, check front-end rendering
 - Added new styling for more intuitive flow and readability
 - JSON or CSV output options
-- Added birthday, coordinates, and URLs to datatypes
+- Added birthdays, coordinates, and URLs to datatypes
 - refactored code, deleted unnecessary spread operations and temporary assignments
 
 ## Stretch Features: 
