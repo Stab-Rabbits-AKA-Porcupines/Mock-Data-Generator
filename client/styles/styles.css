@@ -4,6 +4,16 @@
    License: none (public domain)
 */
 
+#root {
+  --main: #fffffd;
+  --thin-text-color: #00214d;
+  --btn-text-color: #00214d;
+  --secondary: #ff5470;
+  --tertiary: #fde24f;
+  --highlight: #00ebc7;
+
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -56,6 +66,7 @@ body, #root{
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   height: 100vh;
   width: 100vw;
+  background-color: var(--main);
 }
 #root-child{
   position: relative;
@@ -67,8 +78,9 @@ body, #root{
  /* grid-template-columns: repeat(4, 1fr); */
  /* grid-template-rows: 1fr, 12fr, 1fr  */
  flex-direction: column;
- justify-content: space-between;
+ justify-content: center;
  align-items: center;
+ gap: 3rem;
 }
 #header{
   position: static;
@@ -77,30 +89,51 @@ body, #root{
   grid-row: 0;
   grid-column: 1/5; */
   display: flex;
-  background-color: #679186;
+  /* background-color: #679186; */
   width:100vw;
-  height: 5%;
+  height: 15vh;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: var(--btn-text-color);
+  /* padding-top: 20px; */
 }
 h1{
-  font-size: 2rem;
+  font-size: 3rem;
+
 }
+
+h1 span{
+  font-family: monospace;
+  font-size: 3.2rem;
+  margin: 0 0.5rem 0 0.5rem;
+  color: var(--highlight)
+}
+
 footer{
   position: relative;
   display: flex;
   bottom: 0;
   /* grid-row: 14;
   grid-column: 1/5; */
-  border-top: 2px solid   #264e70;
+  border-top: 2px solid var(--btn-text-color);
   width: 95vw;
   justify-content: center;
   align-items: center;
   padding: 1rem;
   align-items: center;
-  color: rgb(60, 60, 60);
+  height: 1vh;
+  margin-bottom: -4rem;
+  gap: 1rem;
 }
+
+footer span{
+  color: var(--btn-text-color);
+}
+
+footer a{
+  color: var(--btn-text-color)
+}
+
 #main_container{
   display: flex;
   flex-direction: column;
@@ -123,17 +156,18 @@ footer{
   align-items: center;
   justify-content: space-between;
   width: 10rem;
-  background-color:#fdebd3 ;
-  border:1px solid rgb(172, 172, 172);
+  background-color: var(--tertiary) ;
+  border:none;
   border-radius: 5px;
   display: flex;
   margin: .5rem;
   padding: .5rem; 
-  color: rgb(60, 60, 60)
+  color: var(--main);
+  stroke: var(--btn-text-color);
 }
 #new_data_type > button{
   border: none;
-  background-color:#fdebd3;
+  background-color:var(--main);
   
 }
 #text_box_and_copy{
@@ -143,6 +177,8 @@ footer{
 #text_output{
   width:100%;
   height:100%;
+  background-color: var(--btn-text-color);
+  color: var(--main);
 }
 #form{
   display: flex;
@@ -153,12 +189,32 @@ footer{
 
 #dataSelect{
   height: 2rem;
-  width: 50%
+  width: 50%;
+  border: none;
+  background-color: var(--main);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.116);
+  color: var(--btn-text-color);
 }
-#quantity_selector{
+.quantity_selector{
+  border: none;
+  font-size: 1rem;
   height: 1.5rem;
   margin-left: 0.5rem;
+  color: var(--main);
+  background-color: var(--secondary);
+  padding-right: 0.5rem;
+  
 }
+
+.quantity_selector-label{
+  font-size: 0.9rem;
+  color: var(--main);
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.116);
+  padding: 0.1rem 0 0.1rem 2rem;
+  background-color: var(--secondary);
+  border-radius: 5px;
+}
+
 a{
   text-decoration: none;
   color: #264e70;
@@ -167,12 +223,13 @@ a:hover{
   text-decoration: underline;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1324px) {
  body{
   align-items: center;
  }
   #form{
   flex-direction: column;
+  gap: 2rem;
  }
   #main_container{
     width: 80vw
@@ -184,12 +241,30 @@ a:hover{
   display: flex;
   justify-content: space-between;
   padding-bottom: 1rem;
+  align-items: center;
 }
 
 #add_button, #submit_button{
   width: 10rem;
   height: 2rem;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.116);
+  border: none;
 }
+
+#add_button{
+  background-color: var(--secondary);
+  color: var(--main);
+}
+
+#submit_button{
+  background-color: var(--highlight);
+  border: none;
+  color: var(--main);
+  height: 3rem;
+  font-size: 1rem;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.116);
+}
+
 button{
   width: 1.5rem;
   height: 1.5rem;
@@ -218,8 +293,9 @@ button:active{
 
 /* X Button styling */
 .X-button {
+  background-color: var(--main);
 
-  color: rgb(60, 60, 60);
+  color: var(--btn-text-color);
  
   transition: all 125ms linear;
 }

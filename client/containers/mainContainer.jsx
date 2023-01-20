@@ -15,6 +15,7 @@ const MainContainer = () => {
   const dataInput = useRef()
   const quantInput = useRef()
   const textAreaInput = useRef()
+  const outputInput = useRef()
 
   function handleAdd(event) {
     const typeOfData = dataInput.current.value;
@@ -29,7 +30,7 @@ const MainContainer = () => {
         }
       })
       if (alreadyExists === false) {
-        return [...prevTypes, { key: uuidv4(), type: typeOfData }]
+        return [...prevTypes, { key: uuidv4(), type: typeOfData }] //goes through all controllers, all selected values are concated to url parameters
       } else {
         return [...prevTypes]
       }
@@ -46,7 +47,8 @@ const MainContainer = () => {
   function handleSubmit(event) {
     const stateData = dataTypes
     const quantity = quantInput.current.value
-    let fetchString = `http://localhost:3000/api?quantity=${quantity}`
+    const output = outputInput.current.value
+    let fetchString = `http://localhost:3000/api?quantity=${quantity}&output=${output}`
 
     // build our url with all of the datatypes in the query string
     stateData.forEach((element) => {
@@ -55,7 +57,8 @@ const MainContainer = () => {
 
     axios.get(fetchString)
     .then((response) => {
-      textAreaInput.current.value = JSON.stringify(response.data)
+      if (output === 'array') textAreaInput.current.value = JSON.stringify(response.data)
+      else textAreaInput.current.value = response.data
     })
     .catch((err) => console.log('something wrong with axios request', err))
   }
@@ -67,8 +70,8 @@ const MainContainer = () => {
   return (
     <div id="main_container">
       <div id='form'>
-        <label id='quantity_selector-label'> Quantity:
-          <input ref={quantInput} id="quantity_selector" type="number" min='1' max = '100' defaultValue= '5'/>
+        <label className='quantity_selector-label'> Quantity:
+          <input ref={quantInput} className="quantity_selector" type="number" min='1' max = '100' defaultValue= '5'/>
         </label>
         <select ref={dataInput} name="dataSelect" id="dataSelect">
           <option value="firstName">First Name</option>
@@ -77,17 +80,27 @@ const MainContainer = () => {
           <option value="email">Email</option>
           <option value="phoneNumber">Phone Number</option>
           <option value="country">Country</option>
+          <option value="birthday">Birthday</option>
+          <option value="coordinates">Coordinates</option>
+          <option value="URLs">URLs</option>
         </select>
         <button id='add_button' onClick={handleAdd} >Add Data Type</button>
       </div>
-      
+
       <div id="datatype_selector">
-        <DataSelector dataTypes={dataTypes} handleDelete={handleDelete} />
+        <DataSelector dataTypes={dataTypes} handleDelete={handleDelete}/>
       </div>
       {/* make a button to add new DataType */}
       <div id = 'add_and_submit'>
-       
+
         <button id="submit_button" onClick={handleSubmit} >Generate Data</button>
+        <div id='csv'>
+        <label >Select output format: </label>
+        <select ref={outputInput} name="CSVSelect" id="CSVSelect">
+          <option value="CSV">CSV</option>
+          <option value="array">JSON</option>
+        </select>
+      </div>
       </div>
       <div id= 'text_box_and_copy'>
         <textarea ref={textAreaInput} id="text_output">
