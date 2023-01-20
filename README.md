@@ -4,6 +4,7 @@
 
 ## Version 2.0 
 - Used TDD to implement new datatypes and output options, check front-end rendering
+  -Designed React tests for rendering newly added datatypes (in 'frontend' branch with additional dependences differing from main branch) 
 - Added new styling for more intuitive flow and readability
 - JSON or CSV output options
 - Added birthdays, coordinates, and URLs to datatypes
