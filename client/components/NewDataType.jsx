@@ -7,7 +7,7 @@ export default function NewDataType({ dataType, handleDelete }) {
     }
 
     const text = dataType.type;
-    const result = text.replace(/([A-K][M-Q][S-T][V-Z])/g, " $1"); //crazy regex is to leave out "U" "R" and "L"
+    const result = text.replace(/([A-Z])/g, " $1");
     const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
 
   return (
