@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/Yeeti-Crabs/Mock-Data-Generator#readme",
   "jest": {
+    "globalSetup": "./jest-setup.js",
+    "globalTeardown": "./jest-teardown.js",
     "testEnvironment": "jest-environment-jsdom",
     "setupFilesAfterEnv": [
       "@testing-library/jest-dom/extend-expect"
