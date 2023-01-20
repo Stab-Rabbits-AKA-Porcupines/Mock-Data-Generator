@@ -19,6 +19,7 @@ describe('Route intergration', () => {
       it('responds with 200 status and application/json content type', () => {
         return request(server)
           .get('/api')
+          .query({ output: 'array' })
           .expect('Content-Type', /application\/json/)
           .expect(200);
       });
