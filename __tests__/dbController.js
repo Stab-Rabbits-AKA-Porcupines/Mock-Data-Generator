@@ -19,33 +19,31 @@ describe('dbController tests', () => {
   const res = {};
 
   beforeAll(() => {
-    //mockreq
     req.query = {
       quantity: 3,
-      link: true,
+      URLs: true,
       birthday: true,
-      coordinates: true
+      coordinates: true,
+      CSV: true
     };
 
-    //mockres
     res.locals = {
       data: []
     };
   });
 
-  //if data empty, need to make obj + add properties
-  //if data has at least 1 obj in it, just add properties
-
   describe('getBirthday controller tests', () => {
     const getBirthday = dbController[7];
+
+    beforeEach(() => {
+      getBirthday(req, res);
+    });
 
     it('has a function getBirthday', () => {
       expect(typeof getBirthday).toBe('function');
     });
 
     it('res.locals has birthday property in each obj', () => {
-      getBirthday(req, res);
-
       for (let i = 0; i < req.query.quantity; i++) {
         expect(res.locals.data[i]).toHaveProperty('birthday');
         expect(res.locals.data[i].birthday).toBeDefined();
@@ -53,15 +51,12 @@ describe('dbController tests', () => {
     });
 
     it('all birthdays in res.locals should be a string', () => {
-      getBirthday(req, res);
       for (let i = 0; i < req.query.quantity; i++) {
         expect(typeof res.locals.data[i].birthday).toBe('string');
       }
     });
 
     it('birthday should have a year, month and day split up by /', () => {
-      getBirthday(req, res);
-
       for (let i = 0; i < req.query.quantity; i++) {
         expect(res.locals.data[i].birthday[4]).toEqual('/');
         expect(res.locals.data[i].birthday[7]).toEqual('/');
@@ -103,13 +98,16 @@ describe('dbController tests', () => {
   describe('getLink controller tests', () => {
     const getLink = dbController[9];
 
+    beforeEach(() => {
+      getLink(req, res);
+    });
+
     it('has a function getLink', () => {
       // test for function type
       expect(typeof getLink).toBe('function');
     });
     // test for return string
     it('getLink returns a string', () => {
-      getLink(req, res);
       for (let i = 0; i < req.query.quantity; i++) {
         const result = res.locals.data[i].link;
         expect(typeof result).toBe('string');
@@ -117,7 +115,6 @@ describe('dbController tests', () => {
     });
     // test for first 7 indexes to = 'https://'
     it('getLink returned string has a valid https:// prefix', () => {
-      getLink(req, res);
       for (let i = 0; i < req.query.quantity; i++) {
         const prefix = res.locals.data[i].link.slice(0, 8);
         expect(prefix).toBe('https://');
@@ -125,7 +122,6 @@ describe('dbController tests', () => {
     });
     // test for 8th index to be a valid character
     it('getLink has a letter for the 8th index of its returned string', () => {
-      getLink(req, res);
       for (let i = 0; i < req.query.quantity; i++) {
         const eighthIndex = res.locals.data[i].link.slice(8, 9);
         function validChar(str) {
@@ -137,7 +133,6 @@ describe('dbController tests', () => {
     // test for final 3 or 4 indexes to = one of suffix array elements
     it('getLink has a valid suffix', () => {
       const suffix = ['.com', '.io', '.org', '.edu', '.net', '.us'];
-      getLink(req, res);
       for (let i = 0; i < req.query.quantity; i++) {
         const string4 = res.locals.data[i].link.slice(-4);
         const string3 = res.locals.data[i].link.slice(-3);
@@ -148,7 +143,6 @@ describe('dbController tests', () => {
     });
     // test for res.locals.data to be updated
     it('getLink populates res.locals.data', () => {
-      getLink(req, res);
       for (let i = 0; i < req.query.quantity; i++) {
         const result = res.locals.data[i].link;
         expect(result).toBeTruthy();
@@ -158,12 +152,15 @@ describe('dbController tests', () => {
     describe('getCoordinates tests', () => {
       const getCoordinates = dbController[8];
 
+      beforeEach(() => {
+        getCoordinates(req, res);
+      });
+
       it('has a function getCoordinates', () => {
         expect(typeof getCoordinates).toBe('function');
       });
 
       it('getCoordinates inserts a new property "coordinates" into res.locals.data and does so the right amount of times', () => {
-        getCoordinates(req, res);
         let count = 0;
         res.locals.data.forEach(obj => {
           if (Object.hasOwn(obj, 'coordinates')) count++;
@@ -172,7 +169,6 @@ describe('dbController tests', () => {
       });
 
       it('getCoordinates returns a string with a comma', () => {
-        getCoordinates(req, res);
         const result = res.locals.data[0].coordinates.includes(',');
         const string = res.locals.data[0].coordinates;
         expect(result).toBe(true);
@@ -180,7 +176,6 @@ describe('dbController tests', () => {
       });
 
       it('getCoordinates has valid value for latitude', () => {
-        getCoordinates(req, res);
         const resultLat = Number(res.locals.data[0].coordinates.split(',')[0]);
         console.log(resultLat);
         expect(resultLat).toBeGreaterThanOrEqual(-90);
@@ -188,10 +183,44 @@ describe('dbController tests', () => {
       });
 
       it('getCoordinates has valid value for longitude', () => {
-        getCoordinates(req, res);
         const resultLong = Number(res.locals.data[0].coordinates.split(',')[1]);
         expect(resultLong).toBeGreaterThanOrEqual(-180);
         expect(resultLong).toBeLessThanOrEqual(180);
+      });
+    });
+
+    describe('toCSV tests', () => {
+      const toCSV = dbController[10];
+
+      beforeEach(() => {
+        res.locals.data = [
+          { firstName: 'Marcelo', birthday: '1970/09/12' },
+          { firstName: 'Stephanie', birthday: '2006/05/24' },
+          { firstName: 'Devyn', birthday: '1957/10/24' },
+          { firstName: 'Mauricio', birthday: '1911/07/22' },
+          { firstName: 'Victor', birthday: '2018/03/16' }
+        ];
+        toCSV(req, res);
+      });
+
+      it('has a function toCSV', () => {
+        console.log(res.locals.data);
+        expect(typeof toCSV).toBe('function');
+      });
+
+      it('toCSV returns a string', () => {
+        expect(typeof res.locals.data[0]).toBe('string');
+      });
+
+      it('toCSV takes the datatypes and puts them in the first row of text in the output', () => {
+        const firstLine = res.locals.data.split('\n', 1);
+        expect(firstLine.includes(req.query.birthday)).toBeTruthy;
+        expect(firstLine.includes('firstName')).toBeTruthy;
+      });
+
+      it('toCSV has the right amount of line breaks', () => {
+        const lines = () => res.locals.data.match(/[^\n]*\n[^\n]*/gi).length + 1;
+        expect(lines()).toEqual(6); // hardcoded with mock data above, see console.log
       });
     });
   });
