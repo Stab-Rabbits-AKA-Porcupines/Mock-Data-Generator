@@ -6,6 +6,10 @@ export default function NewDataType({ dataType, handleDelete }) {
         handleDelete(dataType.key)
     }
 
+
+   
+
+
   return (
     <div id = 'new_data_type'>
         {dataType.type}
