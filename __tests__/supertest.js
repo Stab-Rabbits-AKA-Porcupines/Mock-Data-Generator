@@ -26,7 +26,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of first names when requested for first name data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, firstName: true })
+          .query({ quantity: 10, firstName: true, output: 'array' })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -38,7 +38,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of middle names when requested for middle name data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, fullNameMiddle: true })
+          .query({ quantity: 10, fullNameMiddle: true, output: 'array' })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -50,7 +50,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of last names when requested for last name data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, lastName: true })
+          .query({ quantity: 10, fullName: true, output: 'array' })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -62,7 +62,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of emails when requested for email data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, email: true })
+          .query({ quantity: 10, email: true, output: 'array' })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -74,7 +74,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of phone numbers when requested for phone number data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, phoneNumber: true })
+          .query({ quantity: 10, phoneNumber: true, output: 'array' })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -86,7 +86,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of countries when requested for country data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, country: true })
+          .query({ quantity: 10, country: true, output: 'array' })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -98,7 +98,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of birthdays when requested for birthday data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, birthday: true })
+          .query({ quantity: 10, birthday: true, output: 'array' })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -110,7 +110,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of urls when requested for urls data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, link: true })
+          .query({ quantity: 10, URLs: true, output: 'array' })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -122,7 +122,7 @@ describe('Route intergration', () => {
       it('responds with specified quanties of coordinates when requested for coordinates data', () => {
         return request(server)
           .get('/api')
-          .query({ quantity: 10, coordinates: true })
+          .query({ quantity: 10, coordinates: true, output: 'array' })
           .then(res => {
             expect(res.body.length).toBe(10);
             for (let i = 0; i < 10; i++) {
@@ -135,7 +135,7 @@ describe('Route intergration', () => {
       it('responds to invalid request with an error message in the body', () => {
         return request(server)
           .get('/api')
-          .query({ sdfsf: true })
+          .query({ sdfsf: true, output: 'array' })
           .expect('Content-Type', /application\/json/)
           .then(res => {
             expect(res.body).toBe('Please select an option from the dropdown');
