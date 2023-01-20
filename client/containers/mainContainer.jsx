@@ -70,8 +70,8 @@ const MainContainer = () => {
   return (
     <div id="main_container">
       <div id='form'>
-        <label id='quantity_selector-label'> Quantity:
-          <input ref={quantInput} id="quantity_selector" type="number" min='1' max = '100' defaultValue= '5'/>
+        <label className='quantity_selector-label'> Quantity:
+          <input ref={quantInput} className="quantity_selector" type="number" min='1' max = '100' defaultValue= '5'/>
         </label>
         <select ref={dataInput} name="dataSelect" id="dataSelect">
           <option value="firstName">First Name</option>
@@ -87,14 +87,6 @@ const MainContainer = () => {
         <button id='add_button' onClick={handleAdd} >Add Data Type</button>
       </div>
 
-      <div id='csv'>
-        <label>Select output format: </label>
-        <select ref={outputInput} name="CSVSelect" id="CSVSelect">
-          <option value="CSV">CSV</option>
-          <option value="array">Array of objects</option>
-        </select>
-      </div>
-
       <div id="datatype_selector">
         <DataSelector dataTypes={dataTypes} handleDelete={handleDelete}/>
       </div>
@@ -102,6 +94,13 @@ const MainContainer = () => {
       <div id = 'add_and_submit'>
 
         <button id="submit_button" onClick={handleSubmit} >Generate Data</button>
+        <div id='csv'>
+        <label >Select output format: </label>
+        <select ref={outputInput} name="CSVSelect" id="CSVSelect">
+          <option value="CSV">CSV</option>
+          <option value="array">JSON</option>
+        </select>
+      </div>
       </div>
       <div id= 'text_box_and_copy'>
         <textarea ref={textAreaInput} id="text_output">

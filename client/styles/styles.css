@@ -123,6 +123,11 @@ footer{
   align-items: center;
   height: 1vh;
   margin-bottom: -4rem;
+  gap: 1rem;
+}
+
+footer span{
+  color: var(--btn-text-color);
 }
 
 footer a{
@@ -190,7 +195,7 @@ footer a{
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.116);
   color: var(--btn-text-color);
 }
-#quantity_selector{
+.quantity_selector{
   border: none;
   font-size: 1rem;
   height: 1.5rem;
@@ -201,7 +206,7 @@ footer a{
   
 }
 
-#quantity_selector-label{
+.quantity_selector-label{
   font-size: 0.9rem;
   color: var(--main);
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.116);
@@ -236,6 +241,7 @@ a:hover{
   display: flex;
   justify-content: space-between;
   padding-bottom: 1rem;
+  align-items: center;
 }
 
 #add_button, #submit_button{
@@ -254,6 +260,8 @@ a:hover{
   background-color: var(--highlight);
   border: none;
   color: var(--main);
+  height: 3rem;
+  font-size: 1rem;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.116);
 }
 
